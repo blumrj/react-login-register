@@ -1,30 +1,54 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextField, Button, Box, Typography, Paper } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { registerSchema } from "../schemas/authSchemas";
+import { registerUser } from "../api/authApi";
 import type z from "zod";
+import { isAxiosError } from "axios";
+import { setLocalStorage } from "../utils";
+import { Link, useNavigate } from "react-router";
 
-type registrationFormData = z.infer<typeof registerSchema>
+type RegistrationFormData = z.infer<typeof registerSchema>;
 
-const RegistrationForm = () => {
+interface RegisterFormProps {
+  handleSnackbarOpen: () => void;
+  handleSnackbarMessageChange: (message: string) => void;
+}
+
+const RegistrationForm = ({
+  handleSnackbarOpen,
+  handleSnackbarMessageChange,
+}: RegisterFormProps) => {
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<registrationFormData>({
+  } = useForm<RegistrationFormData>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data:registrationFormData) => {
+  const onSubmit = async (data: RegistrationFormData) => {
     console.log("form submitted", data);
+    try {
+      const response = await registerUser(data);
+      handleSnackbarMessageChange(response.data.message);
+      setLocalStorage("user", response.data.user);
+      navigate("/dashboard");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        handleSnackbarMessageChange(error.response?.data?.message);
+      } else {
+        handleSnackbarMessageChange("Unexpected error.");
+      }
+    } finally {
+      handleSnackbarOpen();
+    }
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 4, maxWidth: 400, mx: "auto", mt: 4 }}>
-      <Typography variant="h5" component="h1" gutterBottom>
-        Create an Account
-      </Typography>
+    <>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -65,7 +89,8 @@ const RegistrationForm = () => {
           Register
         </Button>
       </Box>
-    </Paper>
+      <Link to="/login">Already have an account? Login here</Link>
+    </>
   );
 };
 

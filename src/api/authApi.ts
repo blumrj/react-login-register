@@ -15,7 +15,7 @@ type RegistrationPayload = {
 // this function simulates network delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const login = async (data: LoginPayload) => {
+export const loginUser = async (data: LoginPayload) => {
   await delay(1000);
 
   if (data.email !== "test@test.com" || data.password !== "Password1") {
@@ -45,12 +45,14 @@ export const login = async (data: LoginPayload) => {
       user: {
         id: nanoid(),
         email: data.email,
+        fullName: "Test Test",
+
       },
     },
   };
 };
 
-export const register = async (data: RegistrationPayload) => {
+export const registerUser = async (data: RegistrationPayload) => {
   await delay(1000);
 
   if (data.email === "test@test.com") {
