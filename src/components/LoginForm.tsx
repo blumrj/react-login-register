@@ -7,6 +7,7 @@ import { loginUser } from "../api/authApi";
 import { isAxiosError } from "axios";
 import { setLocalStorage } from "../utils";
 import { Link, useNavigate } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -28,12 +29,14 @@ const LoginForm = ({
   });
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await loginUser(data);
       handleSnackbarMessageChange(response.data.message);
       setLocalStorage("user", response.data.user);
+      login(response.data.user);
       navigate("/dashboard");
     } catch (error) {
       if (isAxiosError(error)) {
@@ -81,8 +84,8 @@ const LoginForm = ({
           {isSubmitting ? "Processing" : "Log In"}
         </Button>
       </Box>
-      <Typography variant="body2" gutterBottom sx={{ display: "block" }}>
-        <Link to="/register">Already have an account? Login here</Link>
+      <Typography variant="body2" gutterBottom sx={{ display: "block", mt: 2, textAlign: 'center' }}>
+        <Link to="/register" style={{ color: 'inherit', textDecoration: 'none' }}>Already have an account? Login here</Link>
       </Typography>
     </>
   );

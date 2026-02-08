@@ -1,6 +1,7 @@
 import { Box, Paper, Typography, Button, Avatar } from "@mui/material";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { getFromLocalStorage } from "../utils";
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
 
 interface OutletContext {
   handleSnackbarOpen: () => void;
@@ -11,17 +12,25 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const { handleSnackbarOpen, handleSnackbarMessageChange } =
     useOutletContext<OutletContext>();
+  const { user, isAuthenticated, logout } = useAuth();
 
-  const user = getFromLocalStorage("user");
-
-  console.log(user);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogout = () => {
-    navigate("/login");
+    logout();
     localStorage.removeItem("user");
     handleSnackbarMessageChange("Logged out");
     handleSnackbarOpen();
+    navigate("/login");
   };
+
+  if (!isAuthenticated) {
+    return null; // or a loading spinner
+  }
 
   return (
     <Box
@@ -39,19 +48,21 @@ const DashboardPage = () => {
       >
         <Avatar sx={{ width: 72, height: 72 }}>
           {user
-            ? user.fullName.charAt(0).toUpperCase()
-            : (user.email?.charAt(0)?.toUpperCase() ?? "U")}
+            ? user.fullName?.charAt(0).toUpperCase() ??
+              user.email?.charAt(0)?.toUpperCase() ??
+              "U"
+            : "U"}
         </Avatar>
         <Box sx={{ flex: 1 }}>
           <Typography variant="h6">
-            Welcome, {user.fullName ?? user.email}
+            Welcome, {user?.fullName ?? user?.email}
           </Typography>
-          {user.email && (
+          {user?.email && (
             <Typography variant="body2" color="text.secondary">
               {user.email}
             </Typography>
           )}
-          {user.id && (
+          {user?.id && (
             <Typography variant="body2" color="text.secondary">
               ID: {user.id}
             </Typography>

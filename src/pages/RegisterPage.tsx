@@ -1,6 +1,9 @@
 import { Box, Paper, Typography } from "@mui/material";
 import RegistrationForm from "../components/RegistrationForm";
 import { useOutletContext } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface OutletContext {
   handleSnackbarOpen: () => void,
@@ -10,6 +13,14 @@ interface OutletContext {
 const RegisterPage = () => {
 
   const {handleSnackbarOpen, handleSnackbarMessageChange} = useOutletContext<OutletContext>()
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <Box

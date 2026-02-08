@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { registerSchema } from "../schemas/authSchemas";
 import { registerUser } from "../api/authApi";
@@ -7,6 +7,7 @@ import type z from "zod";
 import { isAxiosError } from "axios";
 import { setLocalStorage } from "../utils";
 import { Link, useNavigate } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
 
 type RegistrationFormData = z.infer<typeof registerSchema>;
 
@@ -20,6 +21,7 @@ const RegistrationForm = ({
   handleSnackbarMessageChange,
 }: RegisterFormProps) => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const {
     register,
@@ -35,6 +37,7 @@ const RegistrationForm = ({
       const response = await registerUser(data);
       handleSnackbarMessageChange(response.data.message);
       setLocalStorage("user", response.data.user);
+      login(response.data.user);
       navigate("/dashboard");
     } catch (error) {
       if (isAxiosError(error)) {
@@ -89,7 +92,9 @@ const RegistrationForm = ({
           Register
         </Button>
       </Box>
-      <Link to="/login">Already have an account? Login here</Link>
+      <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+        <Link to="/login" style={{ color: 'inherit', textDecoration: 'none' }}>Already have an account? Login here</Link>
+      </Typography>
     </>
   );
 };
