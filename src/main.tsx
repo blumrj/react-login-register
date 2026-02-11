@@ -12,6 +12,7 @@ import DashboardPage from "./pages/DashboardPage.tsx";
 import Root from "./pages/Root.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 
+//creating browser router
 const router = createBrowserRouter([
   {
     path: "/",
@@ -39,7 +40,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    {/* context */}
     <AuthProvider>
+      {/* router provider */}
       <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>,

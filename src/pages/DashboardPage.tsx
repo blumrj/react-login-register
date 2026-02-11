@@ -12,6 +12,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const { handleSnackbarOpen, handleSnackbarMessageChange } =
     useOutletContext<OutletContext>();
+  //from context
   const { user, isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const DashboardPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  //handle logout functionality
   const handleLogout = () => {
     logout();
     localStorage.removeItem("user");
@@ -48,9 +50,9 @@ const DashboardPage = () => {
       >
         <Avatar sx={{ width: 72, height: 72 }}>
           {user
-            ? user.fullName?.charAt(0).toUpperCase() ??
+            ? (user.fullName?.charAt(0).toUpperCase() ??
               user.email?.charAt(0)?.toUpperCase() ??
-              "U"
+              "U")
             : "U"}
         </Avatar>
         <Box sx={{ flex: 1 }}>

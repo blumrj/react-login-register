@@ -23,6 +23,7 @@ function App() {
         onClose={() => setIsSnackbarOpen(false)}
         message={snackbarMessage}
       />
+      {/* adding context to pass values to all child components in outlet */}
       <Outlet context={{ handleSnackbarOpen, handleSnackbarMessageChange }} />
     </>
   );

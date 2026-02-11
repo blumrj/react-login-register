@@ -12,10 +12,13 @@ interface OutletContext {
 
 const RegisterPage = () => {
 
+  //use the context from the parent component - Outlet, react router
   const {handleSnackbarOpen, handleSnackbarMessageChange} = useOutletContext<OutletContext>()
   const { isAuthenticated } = useAuth();
+  //programmatic navigation, react router
   const navigate = useNavigate();
 
+  //a hook that performs side effects based on the dependency array
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard", { replace: true });

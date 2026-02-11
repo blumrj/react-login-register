@@ -1,5 +1,7 @@
-import type { AxiosError } from "axios";
+import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { nanoid } from "nanoid";
+
+//this is to simulate api data
 
 type LoginPayload = {
   email: string;
@@ -22,14 +24,14 @@ export const loginUser = async (data: LoginPayload) => {
     const error: AxiosError = {
       name: "AxiosError",
       message: "Invalid credentials.",
-      config: {},
+      config: {} as InternalAxiosRequestConfig,
       isAxiosError: true,
       toJSON: () => ({}),
       response: {
         status: 401,
         statusText: "Unauthorized",
         headers: {},
-        config: {},
+        config: {} as InternalAxiosRequestConfig,
         data: {
           message: "Invalid email or password.",
         },
@@ -59,14 +61,14 @@ export const registerUser = async (data: RegistrationPayload) => {
     const error: AxiosError = {
       name: "AxiosError",
       message: "An account with this email address already exists.",
-      config: {},
+      config: {} as InternalAxiosRequestConfig,
       isAxiosError: true,
       toJSON: () => ({}),
       response: {
         status: 409,
         statusText: "Conflict",
         headers: {},
-        config: {},
+        config: {} as InternalAxiosRequestConfig,
         data: {
           message: "An account with this email address already exists.",
         },
