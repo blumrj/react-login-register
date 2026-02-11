@@ -33,8 +33,6 @@ password: Password1
 
 ## Installation
 
-1. Install dependencies:
-
 ```bash
 git clone https://github.com/blumrj/react-login-register.git
 cd react-login-register
