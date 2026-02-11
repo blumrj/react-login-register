@@ -13,7 +13,7 @@ const CustomSnackbar = ({ message, isOpen, onClose }: CustomSnackbarType) => {
 
   //func that handles close functionality of the snackbar. it can be closed by either clicking on the close button or by clicking anywhere outside the snackbar
   const handleClose = (
-    event: React.SyntheticEvent | Event,
+    _event: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason,
   ) => {
     if (reason === "clickaway") {
